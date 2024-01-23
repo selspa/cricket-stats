@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+   db:
+      image: postgres:alpine
+      container_name: cricketStats-db
+      environment:
+         POSTGRES_PASSWORD: postgres
+         POSTGRES_USER: postgres
+         POSTGRES_DB: cricket_stats
+      volumes:
+         - ./pgdata:/var/lib/postgresql/data
+      ports:
+         - 5432:5432
+   backend:
+      build: 
+         context: ./python
+         dockerfile: Dockerfile
+      container_name: cricketStats-python
+      environment:
+         DATABASE_USERNAME: postgres
+         DATABASE_PASSWORD: postgres
+         DATABASE_HOST: db
+         DATABASE_PORT: 5432
+         DATABASE_NAME: cricket_stats
+         DUMMY_DATA_ENABLED: yes
+      #command: uvicorn main:app --host 0.0.0.0 --port 80 --reload
+      ports:
+         - 8080:80
+      volumes:
+         - ./python:/app
+      depends_on: 
+         - db
+      restart: on-failure
+   
+   frontend:
+      build: 
+         context: ./react-app
+         dockerfile: Dockerfile
+      container_name: cricketStats-react
+      environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
+      volumes:
+         - ./react-app:/app
+         - /app/node_modules
+      command: npm start
+      ports:
+         - "3000:3000"
+      depends_on:
+         - backend
+

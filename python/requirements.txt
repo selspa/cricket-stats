@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+watchfiles
+psycopg
+psycopg[binary] 
+yoyo-migrations
+sqlalchemy 
