@@ -1,4 +1,4 @@
-FROM node:21.6
+FROM node:alpine
 ENV NODE_OPTIONS=--openssl-legacy-provider
 WORKDIR /app
 COPY . /app
