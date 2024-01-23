@@ -3,7 +3,7 @@ import psycopg
 from psycopg.rows import dict_row
 import time
 
-def connect(retry_interval=5, max_retries=10):
+def connect(retry_interval=10, max_retries=20):
     
     connection_params = {}
     conn = None
